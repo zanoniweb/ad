@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA DE GESTÃO JURÍDICA - Sua Solução Definitiva</title>
+    <link rel="stylesheet" href="style.css"> 
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Base e Fontes */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: #333;
+            overflow-x: hidden;
+            background-color: #f5f7fa;
+        }
+
+        /* Cores de destaque para facilidade de mudança */
+        :root {
+            --primary-blue: #004d80; /* Azul escuro, mais profissional */
+            --dark-blue: #003366;
+            --accent-green: #38761d; /* Verde escuro, sério */
+            --light-bg: #f5f7fa;
+            --dark-bg: #1a1a1a;
+            --text-color-dark: #2c3e50;
+        }
+
+        /* Menu de Navegação Superior */
+        .menu {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: linear-gradient(45deg, var(--primary-blue), #006699);
+            box-shadow: 0 4px 10px rgba(0, 77, 128, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu a:hover {
+            background: linear-gradient(45deg, #006699, var(--primary-blue));
+            box-shadow: 0 6px 15px rgba(0, 77, 128, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Seção Hero - Destaque Principal */
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1543285198-cab1087814e4?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 180px 20px 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom right, rgba(0, 51, 102, 0.8), rgba(0, 77, 128, 0.7));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            animation: fadeInScale 1.2s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+            line-height: 1.1;
+            font-weight: 800;
+        }
+
+        .hero-content p {
+            font-size: 1.8em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+            margin: 0 auto 40px auto;
+            font-weight: 400;
+        }
+
+        .hero-button {
+            background: linear-gradient(90deg, var(--accent-green), #4CAF50);
+            color: #fff;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.4em;
+            font-weight: 700;
+            box-shadow: 0 6px 15px rgba(56, 118, 29, 0.5);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-button:hover {
+            background: linear-gradient(90deg, #4CAF50, var(--accent-green));
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(56, 118, 29, 0.7);
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Seção de Recursos */
+        .services-section {
+            padding: 100px 20px;
+            text-align: center;
+            background-color: var(--light-bg);
+            position: relative;
+        }
+
+        .services-section h2 {
+            font-size: 3.5em;
+            margin-bottom: 60px;
+            color: var(--dark-blue);
+            font-weight: 800;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .services-section h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-blue), #006699);
+            border-radius: 3px;
+        }
+
+        .services-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 45px;
+        }
+
+        .service-card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 320px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            border-bottom: 5px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-image: linear-gradient(to right, var(--primary-blue), #006699) 1;
+        }
+
+        .service-card i {
+            font-size: 4em;
+            color: var(--primary-blue);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover i {
+            transform: scale(1.1);
+            color: var(--dark-blue);
+        }
+
+        .service-card h3 {
+            font-size: 2.2em;
+            color: var(--text-color-dark);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            font-size: 1.2em;
+            color: #666;
+            line-height: 1.8;
+            flex-grow: 1;
+        }
+
+        /* Boxes de Detalhe dos Serviços */
+        .service-detail-box {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            padding: 60px;
+            max-width: 900px;
+            margin: 80px auto 40px auto;
+            text-align: left;
+            display: none;
+            animation: fadeInExpand 0.7s ease-out;
+            border-left: 8px solid;
+            border-image: linear-gradient(to bottom, var(--primary-blue), #006699) 1;
+            position: relative;
+        }
+
+        @keyframes fadeInExpand {
+            from { opacity: 0; transform: translateY(50px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .service-detail-box h4 {
+            font-size: 2.8em;
+            color: var(--dark-blue);
+            margin-bottom: 30px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .service-detail-box h4 i {
+            font-size: 1.2em;
+            color: var(--primary-blue);
+        }
+
+        .service-detail-box p {
+            font-size: 1.3em;
+            line-height: 2;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        .service-detail-box .close-detail-box {
+            background: linear-gradient(90deg, #dc3545, #e65c5c);
+            color: #fff;
+            border: none;
+            padding: 16px 35px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4);
+        }
+
+        .service-detail-box .close-detail-box:hover {
+            background: linear-gradient(90deg, #e65c5c, #dc3545);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 15px rgba(220, 53, 69, 0.6);
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: var(--dark-bg);
+            color: #f0f0f0;
+            padding: 60px 20px;
+            text-align: center;
+            font-size: 1.1em;
+            border-top: 5px solid var(--primary-blue);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .contact-info, .location-info {
+            flex: 1;
+            min-width: 320px;
+            text-align: left;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer-content h3 {
+            color: #006699;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-content h3 i {
+            font-size: 1.1em;
+        }
+
+        .footer-content p {
+            margin: 12px 0;
+            line-height: 1.9;
+            color: #d0d0d0;
+        }
+        
+        .footer-content p a {
+            color: #006699;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-content p a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .copyright {
+            border-top: 1px solid #444;
+            padding-top: 30px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1em;
+            color: #b0b0b0;
+        }
+
+        .copyright img {
+            vertical-align: middle;
+            margin-left: 10px;
+            height: 30px;
+            filter: grayscale(100%) brightness(150%);
+        }
+
+        /* Media Queries para Responsividade */
+        @media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 3.5em;
+            }
+            .hero-content p {
+                font-size: 1.5em;
+            }
+            .services-section h2 {
+                font-size: 2.8em;
+            }
+            .service-card {
+                width: 48%;
+                padding: 30px;
+            }
+            .service-card h3 {
+                font-size: 1.8em;
+            }
+            .service-card i {
+                font-size: 3.2em;
+            }
+            .service-detail-box {
+                padding: 40px;
+                max-width: 700px;
+            }
+            .service-detail-box h4 {
+                font-size: 2.2em;
+            }
+            .service-detail-box p {
+                font-size: 1.1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                position: static;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .menu ul {
+                display: flex;
+                justify-content: center;
+            }
+            .menu li {
+                margin: 0 8px;
+            }
+            .menu a {
+                padding: 8px 15px;
+                font-size: 0.95em;
+            }
+            .hero-section {
+                padding: 120px 20px 80px;
+            }
+            .hero-content h1 {
+                font-size: 2.8em;
+            }
+            .hero-content p {
+                font-size: 1.3em;
+            }
+            .hero-button {
+                padding: 14px 30px;
+                font-size: 1.2em;
+            }
+            .services-section h2 {
+                font-size: 2.2em;
+            }
+            .services-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .service-card {
+                width: 90%;
+                max-width: 380px;
+                padding: 30px;
+            }
+            .service-card i {
+                font-size: 3em;
+            }
+            .service-card h3 {
+                font-size: 1.6em;
+            }
+            .service-detail-box {
+                padding: 30px;
+            }
+            .service-detail-box h4 {
+                font-size: 1.8em;
+            }
+            .service-detail-box p {
+                font-size: 1em;
+            }
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .contact-info, .location-info {
+                text-align: center;
+                min-width: unset;
+                width: 90%;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2.2em;
+            }
+            .hero-content p {
+                font-size: 1.1em;
+            }
+            .hero-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .services-section h2 {
+                font-size: 1.8em;
+            }
+            .service-card {
+                padding: 25px;
+            }
+            .service-card h3 {
+                font-size: 1.4em;
+            }
+            .service-card i {
+                font-size: 2.5em;
+            }
+            .service-detail-box {
+                padding: 20px;
+            }
+            .service-detail-box h4 {
+                font-size: 1.5em;
+            }
+            .service-detail-box p {
+                font-size: 0.95em;
+            }
+            .footer-content h3 {
+                font-size: 1.4em;
+            }
+            .footer-content p {
+                font-size: 0.9em;
+            }
+            .copyright img {
+                height: 20px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+    <header class="hero-section">
+        <nav class="menu">
+            <ul>
+                <li><a href="acesso.html"><i class="fas fa-arrow-right-to-bracket"></i> Acessar Sistema</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <h1>SISTEMA DE GESTÃO JURÍDICA</h1>
+            <p>Simplifique sua rotina. Gere documentos, gerencie casos e automatize tarefas com a inteligência do nosso sistema, criado para a excelência jurídica.</p>
+            <a href="#resources-section" class="hero-button"><i class="fas fa-gavel"></i> Otimize Sua Gestão Agora</a>
+        </div>
+    </header>
+
+
+    <main>
+        <section id="resources-section" class="services-section">
+            <h2>Documentos e Serviços Jurídicos na Palma da Sua Mão</h2>
+            <div class="services-container">
+                
+                <div class="service-card" data-service="contratos">
+                    <i class="fas fa-file-contract"></i>
+                    <h3>Contratos</h3>
+                    <p>Crie contratos de prestação de serviços, compra/venda, locação e muito mais. Formalize acordos com segurança e agilidade.</p>
+                </div>
+
+                <div class="service-card" data-service="notificacoes">
+                    <i class="fas fa-bell"></i>
+                    <h3>Notificações</h3>
+                    <p>Emita notificações de cobrança e rescisão de forma rápida e formal. Comunique-se com clientes e terceiros de maneira eficiente.</p>
+                </div>
+
+                <div class="service-card" data-service="peticoes-iniciais">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>Petições Iniciais</h3>
+                    <p>Elabore petições iniciais para as áreas cível, trabalhista e de consumidor, com modelos prontos para adaptação.</p>
+                </div>
+
+                <div class="service-card" data-service="recursos">
+                    <i class="fas fa-reply-all"></i>
+                    <h3>Recursos</h3>
+                    <p>Produza recursos como apelações, agravos e embargos, garantindo a documentação correta para cada instância judicial.</p>
+                </div>
+
+                <div class="service-card" data-service="procuracoes">
+                    <i class="fas fa-gavel"></i>
+                    <h3>Procurações</h3>
+                    <p>Gere procurações ad judicia, públicas e de revogação, formalizando poderes de representação de forma segura e autônoma.</p>
+                </div>
+
+                <div class="service-card" data-service="honorarios">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <h3>Honorários</h3>
+                    <p>Gerencie seus honorários com facilidade. Crie contratos, recibos e até mesmo boletos ou QR Codes para pagamento.</p>
+                </div>
+
+                <div class="service-card" data-service="declaracoes">
+                    <i class="fas fa-file-invoice"></i>
+                    <h3>Declarações</h3>
+                    <p>Crie declarações de residência, hipossuficiência e união estável de forma rápida, com campos pré-definidos para preenchimento.</p>
+                </div>
+
+                <div class="service-card" data-service="relatorios">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Relatórios</h3>
+                    <p>Acompanhe o andamento de processos, gere pareceres e checklists para ter uma visão completa da sua gestão jurídica.</p>
+                </div>
+
+                <div class="service-card" data-service="termos">
+                    <i class="fas fa-file-signature"></i>
+                    <h3>Termos</h3>
+                    <p>Elabore termos de responsabilidade, confidencialidade e quitação. Documente acordos e formalize procedimentos de forma segura.</p>
+                </div>
+
+                <div class="service-card" data-service="financeiro">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Financeiro</h3>
+                    <p>Gerencie a parte financeira com propostas de honorários, relatórios de despesas e geração de QR Codes para pagamentos. </p>
+                </div>
+            </div>
+
+            <div id="detail-box-contratos" class="service-detail-box">
+                <h4><i class="fas fa-file-contract"></i> Contratos: Geração de Documentos Jurídicos</h4>
+                <p>O recurso de **Contratos** permite que você crie documentos importantes como contratos de prestação de serviços, de compra e venda, e de locação de forma rápida e segura. Utilize modelos pré-formatados para inserir os dados do cliente e as cláusulas específicas, gerando um documento pronto para impressão ou envio. Este serviço é ideal para formalizar acordos e proteger os interesses de seus clientes com agilidade e precisão.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+            
+            <div id="detail-box-notificacoes" class="service-detail-box">
+                <h4><i class="fas fa-bell"></i> Notificações: Comunicação Formal e Eficaz</h4>
+                <p>Emita **notificações de cobrança, rescisão** e outros avisos de forma automatizada. Com este recurso, você pode criar documentos formais para comunicar clientes ou terceiros sobre prazos, pendências ou o encerramento de serviços. A ferramenta garante que a comunicação seja clara, documentada e com a formalidade necessária para a área jurídica.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-peticoes-iniciais" class="service-detail-box">
+                <h4><i class="fas fa-folder-open"></i> Petições Iniciais: Modelos Estruturados e Prontos</h4>
+                <p>O sistema oferece modelos de **petições iniciais** para as áreas **cível, trabalhista e de consumidor**. Você pode preencher os dados do caso e das partes para gerar um documento base completo, economizando tempo e garantindo a estrutura legal necessária para iniciar um processo. É a solução perfeita para dar o primeiro passo em novas ações judiciais com mais eficiência.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-recursos" class="service-detail-box">
+                <h4><i class="fas fa-reply-all"></i> Recursos: Documentos para Desafios Jurídicos</h4>
+                <p>Prepare **recursos** como apelações, agravos e embargos de forma rápida. Esta funcionalidade foi criada para auxiliar na elaboração de documentos que contestam decisões judiciais. Com ela, você pode focar na argumentação legal, enquanto o sistema se encarrega de formatar a documentação de acordo com os padrões exigidos.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-procuracoes" class="service-detail-box">
+                <h4><i class="fas fa-gavel"></i> Procurações: Geração de Mandatos de Representação</h4>
+                <p>Crie **procurações ad judicia, públicas ou de revogação** de forma autônoma. Basta preencher as informações do outorgante e do outorgado, bem como os poderes concedidos, para gerar o documento necessário. Este recurso garante que a representação legal seja feita com a formalidade e segurança que o meio jurídico exige.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-honorarios" class="service-detail-box">
+                <h4><i class="fas fa-hand-holding-usd"></i> Honorários: Gestão e Cobrança Simplificada</h4>
+                <p>Com o módulo de **Honorários**, você tem total controle sobre os seus recebimentos. Gere contratos, recibos e até mesmo boletos ou QR Codes para pagamentos de forma integrada, facilitando a vida financeira do seu escritório e dos seus clientes. É a solução completa para a gestão de receitas e cobranças de forma profissional.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-declaracoes" class="service-detail-box">
+                <h4><i class="fas fa-file-invoice"></i> Declarações: Emissão de Documentos Comprobatórios</h4>
+                <p>O sistema permite a geração de **declarações** de residência, hipossuficiência e união estável de forma ágil. Com formulários simples, você pode emitir esses documentos comprobatórios para seus clientes, economizando tempo e garantindo a formalidade necessária para uso em processos e requerimentos diversos.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-relatorios" class="service-detail-box">
+                <h4><i class="fas fa-chart-line"></i> Relatórios: Análise e Acompanhamento de Casos</h4>
+                <p>Tenha uma visão estratégica de seus casos com o módulo de **Relatórios**. Acompanhe os andamentos processuais, gere pareceres técnicos e utilize checklists para organizar as etapas de cada processo. Essa funcionalidade é essencial para manter a organização, o controle e a transparência em todos os seus projetos jurídicos.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-termos" class="service-detail-box">
+                <h4><i class="fas fa-file-signature"></i> Termos: Documentos de Acordo e Compromisso</h4>
+                <p>Crie **termos de responsabilidade, confidencialidade e quitação** de maneira intuitiva. Este recurso permite que você formalize compromissos entre partes, garantindo a proteção de informações sensíveis, a definição de responsabilidades e a confirmação de quitação de débitos, tudo com a segurança jurídica necessária.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+            <div id="detail-box-financeiro" class="service-detail-box">
+                <h4><i class="fas fa-dollar-sign"></i> Financeiro: Propostas e Relatórios de Pagamento</h4>
+                <p>Organize suas finanças com o módulo **Financeiro**. Elabore propostas de honorários detalhadas, gere relatórios de despesas e crie QR Codes para que seus clientes possam realizar pagamentos de forma fácil e moderna. Uma gestão financeira transparente e eficiente é fundamental para o sucesso do seu escritório.</p>
+                <button class="close-detail-box">Fechar Detalhes</button>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3><i class="fas fa-phone-volume"></i> Contato</h3>
+                <p>E-mail: contato@gestaojuridica.com</p>
+                <p>Telefone: (00) 1234-5678</p>
+            </div>
+            <div class="location-info">
+                <h3><i class="fas fa-map-marker-alt"></i> Localização</h3>
+                <p>Rua da Justiça, 123 - Bairro Legal</p>
+                <p>Cidade Jurídica - Estado da Lei</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Sistema de Gestão Jurídica. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.service-card');
+            const detailBoxes = document.querySelectorAll('.service-detail-box');
+            const closeButtons = document.querySelectorAll('.close-detail-box');
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Esconde qualquer caixa de detalhe que possa estar aberta
+                    detailBoxes.forEach(box => {
+                        box.style.display = 'none';
+                    });
+
+                    // Pega o ID do serviço e mostra a caixa de detalhe correspondente
+                    const serviceId = card.getAttribute('data-service');
+                    const detailBox = document.getElementById(`detail-box-${serviceId}`);
+                    if (detailBox) {
+                        detailBox.style.display = 'block';
+                        // Rola a tela para a caixa de detalhe
+                        detailBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            });
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const parentBox = button.closest('.service-detail-box');
+                    if (parentBox) {
+                        parentBox.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
