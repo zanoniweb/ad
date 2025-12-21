@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Procuração de Poderes Específicos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #eef2f7; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); max-width: 700px; width: 100%; }
+        h1 { color: #0056b3; text-align: center; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 20px; }
+        p { text-align: center; color: #555; margin-bottom: 20px; }
+        fieldset { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        legend { font-weight: bold; color: #0056b3; padding: 0 10px; }
+        label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input[type="text"], input[type="date"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        textarea { resize: vertical; }
+        button { background-color: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 30px; width: 100%; font-size: 16px; transition: background-color 0.3s ease; }
+        button:hover { background-color: #0056b3; }
+    
+    /* Estilos do Menu de Navegação */
+.navbar {
+    background-color: blueviolet;
+    color: white;
+    /* Ajuste de padding: vertical mantido, horizontal reduzido para segurança */
+    padding: var(--spacing-lg) var(--spacing-md); 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* O ajuste principal: garante que o padding fique DENTRO dos 100% de largura */
+    box-sizing: border-box; 
+    z-index: 1000;
+}
+
+.logo p {
+    color: white;
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    margin: 0; /* Remove margens que podem desalinhada o flex */
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    /* Reduzido de 50px para 30px para evitar que o item 'Sair' seja expulso da tela */
+    gap: 30px; 
+    margin: 0;
+    padding: 0;
+}
+
+.menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: var(--font-size-md);
+    transition: color 0.3s, background-color 0.3s;
+    padding: var(--spacing-xs) 0;
+    display: block;
+    /* Impede que o texto quebre linha em telas menores */
+    white-space: nowrap; 
+}
+
+.menu ul li a:hover,
+.menu ul li a:focus {
+    color: #ffd700;
+    outline: none;
+}
+
+.menu-icon {
+    font-size: var(--font-size-xl);
+    display: none;
+    cursor: pointer;
+    color: white;
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+    transition: outline-color 0.3s ease;
+}
+
+.menu-icon:focus {
+    outline-color: #ffd700;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+/* Responsividade - Mobile */
+@media (max-width: 768px) {
+    body {
+        padding-top: 65px;
+    }
+    .navbar {
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    .logo p {
+        font-size: 1.4em;
+    }
+    .menu ul {
+        flex-direction: column;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        background-color: blueviolet; /* Ajustado para manter a cor do menu */
+        width: 100%;
+        display: none;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        gap: 0;
+        max-height: calc(100vh - 65px);
+        overflow-y: auto;
+    }
+    .menu ul li {
+        padding: var(--spacing-md) var(--spacing-xl);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .menu ul li:first-child {
+        border-top: none;
+    }
+    .menu-icon {
+        display: block;
+    }
+    .menu-toggle:checked + .menu-icon + .menu ul {
+        display: flex;
+    }
+}
+
+/* Ajustes finos para telas muito pequenas */
+@media (max-width: 480px) {
+    .navbar {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    .logo p {
+        font-size: 1.2em;
+    }
+}    
+    
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <b><p>S. G. D. A.</p></b>
+        </div>
+
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-icon" aria-label="Abrir Menu">&#9776;</label>
+
+        <nav class="menu">
+        <ul>
+            <li><a href="geracaodocumentosadv.html">Voltar Geração de Documentos</a></li>
+            <li><a href="index.html">Sair</a></li>
+        </ul>
+    </nav>
+    </header>
+
+
+
+    <div class="container">
+        <h1>Procuração com Poderes Específicos</h1>
+        <p>Preencha os dados e liste os poderes específicos. O mandato será restrito a estas finalidades.</p>
+        
+        <form id="form-procuracao">
+            <fieldset>
+                <legend>Dados do Outorgante (Cliente)</legend>
+                <label for="outorgante-nome">Nome Completo:</label>
+                <input type="text" id="outorgante-nome" required>
+                
+                <label for="outorgante-qualificacao">Qualificação (Nacionalidade, Estado Civil, Profissão):</label>
+                <input type="text" id="outorgante-qualificacao" required>
+                
+                <label for="outorgante-cpf">CPF/MF:</label>
+                <input type="text" id="outorgante-cpf" required>
+
+                <label for="outorgante-endereco">Endereço Residencial Completo:</label>
+                <input type="text" id="outorgante-endereco" required placeholder="Rua, nº, Bairro, Cidade/UF">
+            </fieldset>
+
+            <fieldset>
+                <legend>Dados do Outorgado (Advogado/Procurador)</legend>
+                <label for="outorgado-nome">Nome Completo:</label>
+                <input type="text" id="outorgado-nome" required>
+                
+                <label for="outorgado-oab">OAB/UF (ou identificação):</label>
+                <input type="text" id="outorgado-oab" required>
+
+                <label for="outorgado-endereco">Endereço Profissional Completo:</label>
+                <input type="text" id="outorgado-endereco" required>
+            </fieldset>
+
+            <fieldset>
+                <legend>Poderes Específicos</legend>
+                <label for="poderes-especificos">Liste os poderes (um por linha):</label>
+                <textarea id="poderes-especificos" rows="5" required placeholder="- Vender veículo placa...&#10;- Assinar contrato..."></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>Local e Data da Assinatura</legend>
+                <label for="assinatura-local">Cidade/UF:</label>
+                <input type="text" id="assinatura-local">
+                
+                <label for="assinatura-data">Data da Assinatura:</label>
+                <input type="date" id="assinatura-data">
+            </fieldset>
+
+            <button type="button" onclick="gerarProcuracaoEspecifica()">Gerar PDF de Poderes Específicos</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('assinatura-data').valueAsDate = new Date();
+
+        function gerarProcuracaoEspecifica() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4'); 
+
+            const nomeOut = document.getElementById('outorgante-nome').value;
+            const qualOut = document.getElementById('outorgante-qualificacao').value;
+            const cpfOut = document.getElementById('outorgante-cpf').value;
+            const endOut = document.getElementById('outorgante-endereco').value;
+            const nomeAdv = document.getElementById('outorgado-nome').value;
+            const oabAdv = document.getElementById('outorgado-oab').value;
+            const endAdv = document.getElementById('outorgado-endereco').value;
+            const poderesInput = document.getElementById('poderes-especificos').value;
+            const local = document.getElementById('assinatura-local').value;
+            const dataRaw = document.getElementById('assinatura-data').value;
+            const dataAssinatura = dataRaw.split('-').reverse().join('/');
+
+            if (!nomeOut || !nomeAdv || !poderesInput || !endOut || !endAdv) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            const listaPoderes = poderesInput.split('\n').map(p => p.trim()).filter(p => p.length > 0);
+            
+            // Definições de margem (em mm)
+            const marginX = 20; 
+            const pageWidth = 210;
+            const contentWidth = pageWidth - (marginX * 2); // 170mm de área útil
+            let y = 30;
+
+            function addText(text, isBold = false, fontSize = 11, align = "justify") {
+                doc.setFont("helvetica", isBold ? "bold" : "normal");
+                doc.setFontSize(fontSize);
+                // Ajuste crítico: splitTextToSize usa a largura do conteúdo calculada
+                const lines = doc.splitTextToSize(text, contentWidth); 
+                doc.text(lines, marginX, y, { align: align, maxWidth: contentWidth }); 
+                y += (lines.length * 6) + 2; 
+            }
+
+            // Título
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("PROCURAÇÃO COM PODERES ESPECÍFICOS", 105, y, { align: "center" });
+            y += 15;
+            
+            // Qualificação Outorgante
+            addText(`OUTORGANTE: ${nomeOut}, ${qualOut}, inscrito(a) no CPF/MF sob o nº ${cpfOut}, residente e domiciliado(a) na ${endOut}, nomeia e constitui seu(s) bastante(s) procurador(es) o(s) seguinte(s):`);
+            
+            // Qualificação Outorgado
+            addText(`OUTORGADO: ${nomeAdv}, inscrito(a) na OAB sob o nº ${oabAdv}, com endereço profissional em ${endAdv}.`);
+
+            y += 5;
+            addText("FINALIDADE E PODERES ESPECÍFICOS:", true, 12);
+            addText("O presente mandato tem como finalidade exclusiva a prática dos seguintes atos, conferindo-se ao outorgado apenas os poderes listados abaixo:");
+            
+            y += 2;
+            listaPoderes.forEach(poder => {
+                const item = `• ${poder.replace(/^[•\-\*]\s*/, '')}`;
+                doc.setFont("helvetica", "normal");
+                // Recuo para a lista de poderes (25mm em vez de 20mm)
+                const poderLinhas = doc.splitTextToSize(item, contentWidth - 10);
+                doc.text(poderLinhas, marginX + 5, y);
+                y += (poderLinhas.length * 6);
+            });
+
+            y += 6;
+            addText("FICA EXCLUÍDA a concessão de qualquer poder não expressamente listado acima, bem como os poderes da cláusula 'ad judicia'.", true);
+            
+            y += 15;
+            doc.setFont("helvetica", "normal");
+            doc.text(`${local}, ${dataAssinatura}.`, marginX, y);
+
+            // Assinaturas centralizadas
+            y += 35;
+            doc.line(55, y, 155, y); 
+            y += 5;
+            doc.setFont("helvetica", "bold");
+            doc.text(`Outorgante: ${nomeOut}`, 105, y, { align: "center" });
+            
+            y += 25;
+            doc.line(55, y, 155, y);
+            y += 5;
+            doc.text(`Outorgado: ${nomeAdv}`, 105, y, { align: "center" });
+
+            doc.save(`Procuracao_${nomeOut.replace(/\s/g, '_')}.pdf`);
+        }
+    </script>
+</body>
+</html>

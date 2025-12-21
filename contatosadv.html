@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.G.D.A. - Gerador de Contrato de Honorários</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root { --primary: #1a2a6c; --secondary: #b21f1f; --accent: blueviolet; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 0; padding: 100px 20px 40px; display: flex; justify-content: center; }
+        
+        .navbar { 
+            background: var(--accent); color: white; padding: 15px 25px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; 
+            z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        .navbar b p { margin: 0; }
+        .menu ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
+        .menu ul li a { color: white; text-decoration: none; font-size: 14px; font-weight: bold; }
+
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 850px; width: 100%; }
+        h1 { color: var(--primary); text-align: center; border-bottom: 3px solid var(--secondary); padding-bottom: 10px; }
+        fieldset { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; background: #fafafa; }
+        legend { font-weight: bold; color: var(--primary); padding: 0 10px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full { grid-column: span 2; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 13px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        button { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; border: none; padding: 15px; width: 100%; 
+            border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;
+            transition: 0.3s; margin-top: 10px;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo"><b><p>S. G. D. A.</p></b></div>
+        <nav class="menu">
+            <ul>
+                <li><a href="geracaodocumentosadv.html">Voltar Geração de Documentos</a></li>
+                <li><a href="index.html">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Instrumento Particular de Contrato de Honorários</h1>
+        <form id="form-contrato">
+            <fieldset>
+                <legend>I - Dados do Advogado / Escritório (Contratado)</legend>
+                <div class="grid">
+                    <div class="full"><label>Nome do Advogado ou Sociedade:</label><input type="text" id="adv-nome" placeholder="Ex: João Silva ou Silva Advogados" required></div>
+                    <div><label>OAB/UF:</label><input type="text" id="adv-oab" placeholder="00.000/UF" required></div>
+                    <div><label>CNPJ/CPF:</label><input type="text" id="adv-doc" placeholder="00.000.000/0001-00"></div>
+                    <div class="full"><label>Endereço Profissional Completo:</label><input type="text" id="adv-end" placeholder="Rua, nº, Bairro, Cidade-UF" required></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>II - Qualificação do Contratante</legend>
+                <div class="grid">
+                    <div class="full">
+                        <label>Tipo de Cliente:</label>
+                        <select id="tipo-cliente" onchange="ajustarCampos()">
+                            <option value="PF">Pessoa Física</option>
+                            <option value="PJ">Pessoa Jurídica</option>
+                        </select>
+                    </div>
+                    <div class="full"><label id="lbl-nome">Nome Completo:</label><input type="text" id="nome" required></div>
+                    <div><label id="lbl-doc">CPF:</label><input type="text" id="documento" required></div>
+                    <div><label>Estado Civil / Representante Legal:</label><input type="text" id="qualifica" required></div>
+                    <div class="full"><label>Endereço Residencial/Sede:</label><input type="text" id="endereco" required></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>III - Do Objeto e Honorários</legend>
+                <label>Descrição Específica da Demanda (Objeto):</label>
+                <textarea id="objeto" rows="2" placeholder="Ex: Defesa em Ação de Cobrança nº..."></textarea>
+                <div class="grid">
+                    <div><label>Honorários Fixos (R$):</label><input type="text" id="valor" placeholder="Ex: 5.000,00"></div>
+                    <div><label>% Êxito (Quota Litis):</label><input type="text" id="exito" placeholder="Ex: 20%"></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>IV - Condições Finais</legend>
+                <div class="grid">
+                    <div><label>Foro de Eleição (Cidade/UF):</label><input type="text" id="foro" required></div>
+                    <div><label>Data da Assinatura:</label><input type="date" id="data"></div>
+                </div>
+            </fieldset>
+
+            <button type="button" onclick="gerarPDF()">Gerar Contrato Jurídico PDF</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('data').valueAsDate = new Date();
+
+        function ajustarCampos() {
+            const tipo = document.getElementById('tipo-cliente').value;
+            document.getElementById('lbl-nome').innerText = tipo === 'PF' ? 'Nome Completo:' : 'Razão Social:';
+            document.getElementById('lbl-doc').innerText = tipo === 'PF' ? 'CPF:' : 'CNPJ:';
+        }
+
+        function gerarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const v = (id) => document.getElementById(id).value;
+            
+            let y = 30;
+            const margemEsq = 20; 
+            const larguraUtil = 170;
+
+            function addTexto(texto, estilo = "normal", tamanho = 11, alinhamento = "justify") {
+                doc.setFont("times", estilo);
+                doc.setFontSize(tamanho);
+                const linhas = doc.splitTextToSize(texto, larguraUtil);
+                if (y + (linhas.length * 7) > 275) { doc.addPage(); y = 25; }
+                
+                let posX = margemEsq;
+                if(alinhamento === "center") posX = 105;
+                if(alinhamento === "right") posX = 190;
+
+                doc.text(linhas, posX, y, { align: alinhamento, maxWidth: larguraUtil });
+                y += (linhas.length * 6) + 3;
+            }
+
+            addTexto("CONTRATO DE PRESTAÇÃO DE SERVIÇOS ADVOCATÍCIOS", "bold", 14, "center");
+            y += 5;
+
+            addTexto("CLÁUSULA PRIMEIRA - DAS PARTES", "bold", 11);
+            
+            // CONTRATANTE DINÂMICO
+            const contratante = `CONTRATANTE: ${v('nome')}, ${v('qualifica')}, inscrito(a) no CPF/CNPJ sob nº ${v('documento')}, residente e domiciliado(a) em ${v('endereco')}.`;
+            addTexto(contratante);
+
+            // CONTRATADO DINÂMICO (DADOS COLETADOS DO FORMULÁRIO)
+            const contratado = `CONTRATADO: ${v('adv-nome')}, inscrito na OAB sob o nº ${v('adv-oab')}, inscrito no CPF/CNPJ sob o nº ${v('adv-doc')}, com endereço profissional em ${v('adv-end')}.`;
+            addTexto(contratado);
+
+            addTexto("CLÁUSULA SEGUNDA - DO OBJETO JURÍDICO", "bold", 11);
+            addTexto(`O CONTRATADO prestará assistência jurídica para: ${v('objeto')}. A prestação de serviço limita-se à demanda descrita, não incluindo ações incidentais ou recursos extraordinários.`);
+
+            addTexto("CLÁUSULA TERCEIRA - DOS HONORÁRIOS", "bold", 11);
+            addTexto(`Pelos serviços, o CONTRATANTE pagará: a) Valor fixo de R$ ${v('valor')}, a título de honorários pró-labore; b) O percentual de ${v('exito')} a título de honorários ad exitum (quota litis) sobre o proveito econômico obtido.`);
+            addTexto("§1º Os honorários aqui pactuados possuem natureza alimentar e são independentes de eventuais honorários de sucumbência, os quais pertencem exclusivamente ao CONTRATADO.");
+
+            addTexto("CLÁUSULA QUARTA - PRIVACIDADE (LGPD)", "bold", 11);
+            addTexto("O CONTRATANTE autoriza o tratamento de seus dados pessoais para fins de instrução processual, conforme a Lei nº 13.709/2018.");
+
+            addTexto("CLÁUSULA QUINTA - DA RESCISÃO", "bold", 11);
+            addTexto("Em caso de revogação do mandato sem culpa do CONTRATADO, os honorários fixados vencerão antecipadamente, sendo devidos em sua integralidade.");
+
+            y += 10;
+            addTexto(`${v('foro')}, ${v('data').split('-').reverse().join('/')}.`, "normal", 11, "right");
+
+            y += 35;
+            doc.line(30, y, 90, y); 
+            doc.line(120, y, 180, y);
+            y += 5;
+            doc.setFontSize(10);
+            doc.text("CONTRATANTE", 60, y, { align: "center" });
+            doc.text("CONTRATADO", 150, y, { align: "center" });
+
+            doc.save(`Contrato_Honorarios_${v('nome').replace(/\s/g, '_')}.pdf`);
+        }
+    </script>
+</body>
+</html>

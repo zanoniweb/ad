@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>S.G.D.A. - Gerador de Boletos Profissionais</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        
+        .navbar { 
+            background: #004080; 
+            color: white; 
+            padding: 15px 30px; 
+            position: fixed; 
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            z-index: 1000; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .logo b p { font-size: 18px; letter-spacing: 1px; }
+
+        .container { background: white; max-width: 850px; margin: 100px auto 20px; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { text-align: center; margin-bottom: 30px; color: #004080; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { background: #f8f9fa; padding: 10px; margin-top: 20px; border-left: 4px solid #004080; font-weight: bold; }
+        label { display: block; margin-top: 15px; font-size: 13px; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        button { width: 100%; background: #28a745; color: white; border: none; padding: 18px; margin-top: 30px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #218838; }
+    </style>
+</head>
+<body>
+
+<header class="navbar"> 
+    <div class="logo"><b><p>S. G. D. A.</p></b></div>
+    <nav class="menu">
+        <ul>
+            <li><a href="geracaodocumentosadv.html">Voltar Geração de Documentos</a></li>
+            <li style="color: rgba(255,255,255,0.5)">|</li>
+            <li><a href="index.html">Sair</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Gerador de Boleto Profissional (em dia)</h2>
+    
+    <div class="section-title">Dados do Beneficiário (Credor)</div>
+    <div class="grid">
+        <input type="text" id="razao" placeholder="Nome do Beneficiário">
+        <input type="text" id="cnpj_beneficiario" placeholder="CNPJ/CPF do Beneficiário">
+    </div>
+    <div class="grid">
+        <input type="text" id="dadosBancarios" placeholder="Banco (Ex: Bradesco S.A. 237-2)">
+        <input type="text" id="agenciaConta" placeholder="Agência / Código Beneficiário">
+    </div>
+
+    <div class="section-title">Dados do Pagador (Devedor)</div>
+    <div class="grid">
+        <input type="text" id="pagador" placeholder="Nome Completo do Pagador">
+        <input type="text" id="pixKey" placeholder="Chave Pix para Recebimento">
+    </div>
+
+    <div class="section-title">Valores e Vencimento</div>
+    <div class="grid">
+        <div>
+            <label>Valor do Documento (R$):</label>
+            <input type="number" id="valorParcela" step="0.01" placeholder="0,00">
+        </div>
+        <div>
+            <label>Data de Vencimento:</label>
+            <input type="date" id="dataVenc">
+        </div>
+    </div>
+
+    <label>Instruções do Boleto:</label>
+    <textarea id="obs" rows="2">Pagamento de honorários profissionais. Parcela 01/01</textarea>
+
+    <button onclick="gerarBoleto()">GERAR BOLETO BANCÁRIO PDF</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+    async function gerarBoleto() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const valorOriginal = Number(document.getElementById('valorParcela').value);
+        const dataVencStr = document.getElementById('dataVenc').value;
+
+        if(!valorOriginal || !dataVencStr) return alert("Por favor, preencha o Valor e a Data de Vencimento!");
+
+        // --- ESTILIZAÇÃO PDF (PADRÃO COMERCIAL) ---
+        doc.setFont("courier", "bold");
+        doc.setFontSize(14);
+        doc.text(document.getElementById('dadosBancarios').value.toUpperCase() || "BANCO S.A.", 10, 15);
+        doc.text("000-0", 65, 15);
+        doc.text("RECIBO DO PAGADOR", 130, 15);
+        doc.line(10, 17, 200, 17);
+
+        const drawField = (x, y, w, h, label, value, bold = false) => {
+            doc.setFontSize(7);
+            doc.setFont("helvetica", "normal");
+            doc.rect(x, y, w, h);
+            doc.text(label, x + 1, y + 3);
+            if(bold) doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.text(value.toString(), x + 1, y + 8);
+            doc.setFont("helvetica", "normal");
+        }
+
+        // Linha 1
+        drawField(10, 17, 130, 10, "Local de Pagamento", "PAGÁVEL EM QUALQUER BANCO OU VIA PIX");
+        drawField(140, 17, 60, 10, "Vencimento", dataVencStr.split('-').reverse().join('/'), true);
+
+        // Linha 2
+        drawField(10, 27, 130, 10, "Beneficiário", document.getElementById('razao').value + " - " + document.getElementById('cnpj_beneficiario').value);
+        drawField(140, 27, 60, 10, "Agência / Código Beneficiário", document.getElementById('agenciaConta').value, true);
+
+        // Linha 3
+        drawField(10, 37, 40, 10, "Data do Doc.", new Date().toLocaleDateString('pt-BR'));
+        drawField(50, 37, 40, 10, "Nº Documento", "2025." + Math.floor(Math.random() * 9999));
+        drawField(90, 37, 20, 10, "Espécie", "RC");
+        drawField(110, 37, 30, 10, "Aceite", "N");
+        drawField(140, 37, 60, 10, "Nosso Número", "14/" + Math.floor(Math.random() * 999999), true);
+
+        // Instruções
+        drawField(10, 47, 130, 30, "Instruções", "");
+        doc.setFontSize(8);
+        doc.text("- " + document.getElementById('obs').value, 11, 53);
+        
+        doc.setFont("helvetica", "bold");
+        doc.text(`- PAGAR VIA PIX CHAVE: ${document.getElementById('pixKey').value}`, 11, 72);
+
+        // VALORES LADO DIREITO
+        const valorFormatado = valorOriginal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        drawField(140, 47, 60, 10, "(=) Valor do Documento", "R$ " + valorFormatado);
+        drawField(140, 57, 60, 10, "(-) Descontos / Abatimentos", "");
+        drawField(140, 67, 60, 10, "(=) VALOR COBRADO", "R$ " + valorFormatado, true);
+
+        // Pagador
+        drawField(10, 77, 190, 15, "Pagador", document.getElementById('pagador').value.toUpperCase(), true);
+
+        doc.setFontSize(7);
+        doc.text("Autenticação Mecânica - Ficha de Compensação", 140, 96);
+        doc.setLineDash([1, 1], 0);
+        doc.line(10, 105, 200, 105);
+        
+        doc.save(`Boleto_${document.getElementById('pagador').value || 'Documento'}.pdf`);
+    }
+</script>
+</body>
+</html>

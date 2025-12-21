@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA DE GESTÃO JURÍDICA: ÁREA DE ACESSO</title>
+    
+<style>
+/* Estilos gerais */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f0f4f8 0%, #d9e2e9 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+/* Container do login */
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+}
+
+.login-container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Campos de input */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura */
+}
+
+.input-group input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+/* Botão de login */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Mensagem de erro */
+#error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 15px;
+    height: 20px; /* Para evitar que a página "salte" */
+}
+
+/* Estilos do rodapé */
+footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+}
+
+footer img {
+    width: 80px;
+    height: auto;
+    vertical-align: middle;
+    margin-left: 5px;
+    opacity: 0.8;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px 20px;
+        border-radius: 10px;
+    }
+
+    .login-container h2 {
+        font-size: 20px;
+    }
+}
+</style>
+
+</head>
+<body>
+    <div class="login-container">
+        <h2>SISTEMA DE GERAÇÃO DE DOCUMENTOS PARA ADVOGADOS (AS) - S. G. D. A.</h2>
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Usuário">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Senha">
+        </div>
+        <button class="btn-login" onclick="login()">Entrar</button>
+        <p id="error-message"></p>
+    </div>
+
+    <i>
+    <footer>
+        
+       © 2025 Web Programa Sistema de Geração de Documentos para Advogados (S. G. D. A.). Todos os direitos reservados a Juliano <img src="https://d1yei2z3i6k35z.cloudfront.net/6946809/65e45ac72773e_zanoni.1.png" alt="Logo de Juliano Zanoni">
+
+    </footer>
+    </i>
+
+<script src="seguranca.js"></script>
+
+</body>
+</html>

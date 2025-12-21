@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.G.D.A. - Gerador de Notificações</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root { --primary: #1a2a6c; --secondary: #b21f1f; --accent: blueviolet; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 0; padding: 100px 20px 40px; display: flex; justify-content: center; }
+        
+        .navbar { 
+            background: var(--accent); color: white; padding: 15px 25px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; 
+            z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        .navbar b p { margin: 0; }
+        .menu ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
+        .menu ul li a { color: white; text-decoration: none; font-size: 14px; font-weight: bold; }
+
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 900px; width: 100%; }
+        h1 { color: var(--primary); text-align: center; border-bottom: 3px solid var(--secondary); padding-bottom: 10px; }
+        fieldset { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; background: #fafafa; }
+        legend { font-weight: bold; color: var(--primary); padding: 0 10px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full { grid-column: span 2; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; font-size: 13px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        textarea { resize: vertical; min-height: 100px; }
+        
+        button { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; border: none; padding: 15px; width: 100%; 
+            border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;
+            transition: 0.3s; margin-top: 10px;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+        .hint { font-size: 11px; color: #666; font-style: italic; margin-bottom: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo"><b><p>S. G. D. A.</p></b></div>
+        <nav class="menu">
+            <ul>
+                <li><a href="geracaodocumentosadv.html">Voltar Geração de Documentos</a></li>
+                <li><a href="index.html">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Gerador de Notificação Extrajudicial</h1>
+        <p class="hint">Formalize cobranças, pedidos de desocupação ou cumprimento de obrigações.</p>
+        
+        <form id="form-notificacao">
+            <fieldset>
+                <legend>1. Partes Envolvidas</legend>
+                <div class="grid">
+                    <div class="full"><label>Notificante (Quem envia):</label>
+                    <input type="text" id="notificante" placeholder="Nome completo ou Razão Social" required></div>
+                    <div class="full"><label>Notificado (Quem recebe):</label>
+                    <input type="text" id="notificado" placeholder="Nome completo ou Razão Social" required></div>
+                    <div class="full"><label>Endereço do Notificado:</label>
+                    <input type="text" id="end-notificado" placeholder="Rua, nº, Bairro, Cidade-UF" required></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>2. Objeto da Notificação</legend>
+                <div class="grid">
+                    <div class="full"><label>Assunto Principal:</label>
+                    <input type="text" id="assunto" placeholder="Ex: Cobrança de Aluguel Atrasado / Desocupação de Imóvel" required></div>
+                    <div class="full"><label>Descrição dos Fatos:</label>
+                    <textarea id="fatos" placeholder="Descreva detalhadamente o motivo da notificação..."></textarea></div>
+                    <div><label>Prazo para Cumprimento (Dias):</label>
+                    <input type="text" id="prazo" placeholder="Ex: 48 horas / 15 dias"></div>
+                    <div><label>Valor em Débito (se houver):</label>
+                    <input type="text" id="valor" placeholder="R$ 0,00"></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>3. Finalização e Assinatura</legend>
+                <div class="grid">
+                    <div><label>Cidade/UF:</label><input type="text" id="cidade" placeholder="Ex: Londrina/PR"></div>
+                    <div><label>Data:</label><input type="date" id="data"></div>
+                    <div class="full"><label>Quem assina a Notificação:</label>
+                    <input type="text" id="assinatura" placeholder="Nome do Notificante ou seu Advogado"></div>
+                </div>
+            </fieldset>
+
+            <button type="button" onclick="gerarNotificacaoPDF()">Gerar Notificação em PDF</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('data').valueAsDate = new Date();
+
+        function gerarNotificacaoPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const v = (id) => document.getElementById(id).value;
+            
+            let y = 30;
+            const margemEsq = 25;
+            const larguraUtil = 160;
+
+            function addTexto(texto, estilo = "normal", tamanho = 12, alinhamento = "justify", espacamento = 7) {
+                if (!texto) return;
+                doc.setFont("times", estilo);
+                doc.setFontSize(tamanho);
+                const linhas = doc.splitTextToSize(texto, larguraUtil);
+                
+                linhas.forEach(linha => {
+                    if (y > 275) { doc.addPage(); y = 30; }
+                    doc.text(linha, alinhamento === "center" ? 105 : (alinhamento === "right" ? 185 : margemEsq), y, { align: alinhamento });
+                    y += espacamento;
+                });
+                y += 2;
+            }
+
+            // CABEÇALHO
+            addTexto("NOTIFICAÇÃO EXTRAJUDICIAL", "bold", 14, "center");
+            y += 10;
+
+            // DESTINATÁRIO
+            addTexto("AO(À):", "bold", 12);
+            addTexto(v('notificado').toUpperCase(), "bold", 12);
+            addTexto("ENDEREÇO: " + v('end-notificado'), "normal", 11);
+            y += 10;
+
+            // ASSUNTO
+            addTexto("ASSUNTO: " + v('assunto').toUpperCase(), "bold", 11);
+            y += 5;
+
+            // CONTEÚDO
+            addTexto(`Prezado(a) Senhor(a),`, "normal", 12);
+            y += 2;
+            addTexto(`Na qualidade de Notificante, ${v('notificante')} vem, por meio desta, notificá-lo(a) formalmente quanto ao que segue:`, "normal", 12);
+            
+            y += 3;
+            addTexto(v('fatos'), "normal", 12);
+
+            if(v('valor') && v('valor') !== "R$ 0,00") {
+                addTexto(`Fica o(a) notificado(a) ciente do débito atual no valor de ${v('valor')}.`, "bold", 12);
+            }
+
+            y += 3;
+            addTexto(`Desta forma, solicita-se que a situação seja regularizada no prazo improrrogável de ${v('prazo')}, a contar do recebimento desta.`, "normal", 12);
+            
+            y += 3;
+            addTexto(`O não cumprimento da presente solicitação no prazo acima estipulado ensejará a adoção das medidas judiciais cabíveis, incluindo ação de cobrança, perdas e danos e demais cominações legais.`, "normal", 12);
+
+            addTexto(`Caso a obrigação já tenha sido cumprida, favor desconsiderar esta notificação.`, "italic", 10);
+
+            // FINALIZAÇÃO
+            y += 15;
+            const dataFormatada = v('data').split('-').reverse().join('/');
+            addTexto(`${v('cidade')}, ${dataFormatada}.`, "normal", 12, "right");
+
+            y += 30;
+            doc.line(65, y, 145, y);
+            y += 5;
+            addTexto(v('assinatura'), "bold", 12, "center");
+            addTexto("Notificante", "normal", 10, "center");
+
+            doc.save(`Notificacao_${v('notificado').replace(/\s/g, '_')}.pdf`);
+        }
+    </script>
+</body>
+</html>
